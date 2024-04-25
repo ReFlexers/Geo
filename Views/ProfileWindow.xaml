@@ -1,0 +1,151 @@
+﻿<Window x:Class="Geo.Views.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Geo.Views"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:conv="clr-namespace:Geo.Models.Converters"
+         mc:Ignorable="d" FontSize="16" MinHeight="250" MinWidth="420"  Name="Main"
+                 WindowStyle="None"
+         Background="Transparent"
+         AllowsTransparency="True"
+        Title="Профиль" Height="1249" Width="1400" FontFamily="Comic sans ms">
+
+    <Grid>
+        <Border Background="#FFC9B0DA" Opacity="0.4" CornerRadius="20"  MouseDown="Border_MouseDown"  Margin="21,67,32,21" />
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="345" HorizontalAlignment="Left" Margin="47,98,0,48"/>
+
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="886" HorizontalAlignment="Left" Margin="450,96,0,715"/>
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="886" HorizontalAlignment="Left" Margin="451,544,0,43"/>
+        <Button Command="{Binding MinimizeWindow}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3"  Width="20" Height="20" FontSize="5" Margin="1272,71,108,1158">
+            <materialDesign:PackIcon Kind="Minus" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+        <Button  Command="{Binding CloseWindow}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3" Width="20" Height="20" Margin="1298,71,82,1158">
+            <materialDesign:PackIcon Kind="Close" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+        <Button Command="{Binding AddOperatorCommand}" Margin="158,147,1142,1070" Width="100px" Content="Добавить"/>
+        <Button Command="{Binding DeleteOperatorCommand}" Margin="262,147,1038,1070" Width="100px" Content="Удалить" />
+
+        <Label Content="Оператор:" Margin="52,106,1259,1101"/>
+        <ComboBox ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator}" Margin="158,106,1038,0" VerticalAlignment="Top" Height="34" />
+
+        <Label  Content="Точки профиля:" Margin="52,179,1219,1036"/>
+        <ListBox Margin="53,218,1019,680"  ItemsSource="{Binding Profile.Points}" SelectedItem="{Binding SelectedPoint}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Label Content="X: "/>
+                        <TextBox MinWidth="40" Text="{Binding X}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="KeyDown">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SavePointCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <Label Content="Y: "/>
+                        <TextBox MinWidth="40" Text="{Binding Y}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SavePointCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Command="{Binding AddRandomPointCommand}" Margin="52,502,1219,490" Content="Сгенерировать"/>
+        <Button Command="{Binding AddPointCommand}" Margin="186,502,1120,490" Content="Добавить"/>
+        <Button Command="{Binding DeletePointCommand}" Margin="285,502,1019,490" Content="Удалить"/>
+
+        <Label  Content="Пикеты:" Margin="57,574,1264,625"/>
+
+        <ListBox Margin="53,664,1019,112" ItemsSource="{Binding Profile.Pickets}" SelectedItem="{Binding SelectedPicket}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,10">
+                        <DockPanel>
+                            <Label Content="X:  "/>
+                            <TextBox MinWidth="40" Text="{Binding X}" HorizontalAlignment="Left" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SavePicketCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <Label Content=" Y: "/>
+                            <TextBox MinWidth="40" Text="{Binding Y}" HorizontalAlignment="Left" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SavePicketCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Амплитуда: " />
+                            <TextBox MinWidth="40" Text="{Binding A}" HorizontalAlignment="Left" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SavePicketCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <Label Content="Знач(H): "/>
+                            <TextBox MinWidth="40" Text="{Binding H}" HorizontalAlignment="Left" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SavePicketCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+
+                        </DockPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <Button Command="{Binding AddRandomPicketCommand}" Margin="53,1156,1219,61" Content="Сгенерировать" />
+        <Button Command="{Binding AddPicketCommand}" Margin="186,1156,1120,61" Content="Добавить" />
+        <Button Command="{Binding DeletePicketCommand}" Margin="285,1156,1019,61" Content="Удалить"/>
+
+        <Label  Content="Визуализация:" Margin="450,98,824,1109" RenderTransformOrigin="0.5,0.5">
+
+        </Label>
+
+        <Image Source="{Binding Image}" Stretch="Uniform" Margin="460,145,94,735">
+        </Image>
+
+        <Label Content="H Эффективное" Margin="483,727,779,492"  >
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+
+        <Label Content="График значений:" Margin="451,563,797,650"/>
+        <Label Content="Амплитуда" Margin="653,563,647,650" />
+
+        <Image Source="{Binding GraphImage}" Stretch="Uniform" Margin="400,629,400,67" RenderTransformOrigin="0.5,0.5" >
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90.232"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+
+        </Image>
+
+    </Grid>
+</Window>

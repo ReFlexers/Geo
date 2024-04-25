@@ -1,0 +1,107 @@
+﻿<Window x:Class="Geo.Views.AreaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Geo.Views"
+        xmlns:vm="clr-namespace:Geo.ViewModels"
+        xmlns:conv="clr-namespace:Geo.Models.Converters"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                mc:Ignorable="d" FontSize="16" MinHeight="250" MinWidth="420"  Name="Main"
+                WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Title="Площадь" Height="1024" Width="1400"  FontFamily="Comic sans ms">
+    <Window.Resources>
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" Invert="False"/>
+        <conv:NullToVisibilityConverter x:Key="InvertedNullToVisibilityConverter" Invert="True"/>
+    </Window.Resources>
+
+    <Grid>
+        <Border Background="#FFC9B0DA" Opacity="0.4" CornerRadius="20"  MouseDown="Border_MouseDown"  Margin="21,67,32,21" />
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="345" HorizontalAlignment="Left" Margin="47,98,0,48"/>
+
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="886" HorizontalAlignment="Left" Margin="450,96,0,50"/>
+        <Button Command="{Binding MinimizeWindow}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3"  Width="20" Height="20" FontSize="5" Margin="1273,71,107,933">
+            <materialDesign:PackIcon Kind="Minus" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+        <Button  Command="{Binding CloseWindow}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3" Width="20" Height="20" Margin="1299,71,81,933">
+            <materialDesign:PackIcon Kind="Close" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+
+
+
+        <Label  Content="{Binding Area.CalcArea}" Margin="56,150,1206,845"/>
+        <Label Content="Название площади:" Margin="56,114,1180,874"/>
+        <TextBox Text="{Binding AreaName}" Margin="220,109,1036,880" RenderTransformOrigin="0.5,0.5">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+
+
+        <Label Content="Точки площади:" Margin="56,179,1206,808"/>
+        <ListBox  ItemsSource="{Binding Area.Points}" SelectedItem="{Binding SelectedPoint}" Margin="56,221,1016,489">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+
+                        <Label Content="X: "/>
+                        <TextBox MinWidth="40" Text="{Binding X}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SavePointCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <Label Content=" Y: "/>
+                        <TextBox MinWidth="40" Text="{Binding Y}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SavePointCommand, ElementName=Main}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Command="{Binding AddRandomPointCommand}" Margin="251,540,1013,452" Content="Сгенерировать" />
+        <Button Command="{Binding AddPointCommand}" Margin="154,540,1151,452" Content="Добавить"/>
+        <Button Command="{Binding DeletePointCommand}" Margin="56,540,1248,452" Content="Удалить"/>
+
+
+
+        <Label  Content="Профили:" Margin="58,594,1258,399"/>
+        <ListBox Margin="58,630,1036,134"  ItemsSource="{Binding Area.Profiles}" SelectedItem="{Binding SelectedProfile}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Button  Command="{Binding DataContext.OpenProfileCommand, ElementName=Main}" CommandParameter="{Binding}" Content="Открыть"/>
+                        <Label Content="{Binding Operator}" Visibility="{Binding Operator, Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <Label Content="Не назначено" Visibility="{Binding Operator, Converter={StaticResource InvertedNullToVisibilityConverter}}"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Command="{Binding AddProfileCommand}" Margin="157,895,1148,97" Content="Добавить"/>
+        <Button Command="{Binding DeleteProfileCommand}" Margin="58,895,1248,97" Content="Удалить"/>
+      
+            <Image Source="{Binding Image}" Stretch="Uniform" Margin="465,116,79,66" Height="842" Width="856">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseWheel">
+                        <i:InvokeCommandAction Command="{Binding ZoomCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Image>
+    
+    </Grid>
+</Window>

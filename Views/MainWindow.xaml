@@ -1,0 +1,80 @@
+﻿<Window x:Class="Geo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Geo"
+        xmlns:conv="clr-namespace:Geo.Models.Converters"
+        xmlns:vm="clr-namespace:Geo.ViewModels"
+        mc:Ignorable="d" FontSize="16" MinHeight="250" MinWidth="420"  Name="Main" 
+               WindowStyle="None"
+       Background="Transparent"
+       AllowsTransparency="True"
+       WindowStartupLocation="CenterScreen"
+        Title="Geo" Height="1024" Width="1400" FontFamily="Comic sans ms">
+
+    <Window.Resources>
+
+    </Window.Resources>
+
+    <Grid >
+
+
+
+
+
+        <Border Background="#FFC9B0DA" Opacity="0.4" CornerRadius="20" MouseDown="Border_MouseDown"  Margin="21,67,32,21" />
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="345" HorizontalAlignment="Left" Margin="47,98,0,48"/>
+        <Label Content="Заказчик:" Margin="60,115,1252,878"/>
+        <Label Content="Проект:" Margin="60,206,1263,787"/>
+        <Label Content="Площади:" Margin="60,309,1246,673"/>
+        <materialDesign:Card Background="#FF625C65" UniformCornerRadius="20" Width="886" HorizontalAlignment="Left" Margin="450,96,0,50"/>
+
+
+
+
+
+
+        <ComboBox ItemsSource="{Binding SelectedCustomer.Projects}" SelectedItem="{Binding SelectedProject}" Margin="148,204,1019,0" VerticalAlignment="Top"  Opacity="1" />
+        <Button Command="{Binding AddProjectCommand}" Margin="148,255,1152,737" Width="100px" Content="Добавить"/>
+        <Button Command="{Binding DeleteProjectCommand}" Margin="262,255,1038,737" Width="100px" Content="Удалить"/>
+        <ComboBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" Margin="148,113,1019,0" SelectionChanged="ComboBox_SelectionChanged" VerticalAlignment="Top"  Opacity="1" />
+
+        <Button Command="{Binding AddCustomerCommand}" Margin="148,160,1152,832" Width="100px" Content="Добавить"/>
+        <Button Command="{Binding DeleteCustomerCommand}" Margin="262,160,1038,832" Width="100px" Content="Удалить"/>
+
+        <Button Command="{Binding MinimizeWindow}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3"  Width="20" Height="20" FontSize="5" Margin="1273,71,107,933">
+            <materialDesign:PackIcon Kind="Minus" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+        <Button  Command="{Binding CloseApplication}" BorderBrush="#FF8E6AB3" Background="#FF8E6AB3" Width="20" Height="20" Margin="1299,71,81,933">
+            <materialDesign:PackIcon Kind="Close" Margin="-14,-3" Opacity="0.8"/>
+        </Button>
+
+        <ListBox Margin="60,356,1019,138" ItemsSource="{Binding SelectedProject.Areas}" SelectedItem="{Binding SelectedArea}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <Button  Command="{Binding DataContext.OpenAreaCommand, ElementName=Main}" CommandParameter="{Binding}" Content="Открыть" HorizontalAlignment="Right"/>
+                        <Label  Content="{Binding Name}"/>
+                        <Label  Content="{Binding CalcArea}"/>
+                        <Label Content="м2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Command="{Binding AddAreaCommand}" Margin="107,906,1193,86" Width="100px" Content="Добавить"/>
+        <Button Command="{Binding DeleteAreaCommand}" Margin="217,906,1083,86" Width="100px" Content="Удалить"/>
+
+
+        <Image Source="{Binding Image}" Stretch="Uniform" Margin="468,116,82,66">
+            
+        </Image>
+
+    </Grid>
+
+</Window>
+
+
